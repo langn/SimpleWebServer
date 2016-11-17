@@ -67,5 +67,6 @@ public class SiteMonitorControllerTest {
             .andReturn();
     String resultString = result.getResponse().getContentAsString();
     assertTrue(resultString.contains("https://google.com"));
+    assertTrue(resultString.contains("upTimes"));
   }
 }
