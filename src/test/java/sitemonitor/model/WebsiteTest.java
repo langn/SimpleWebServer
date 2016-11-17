@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.Date;
 import java.util.TreeMap;
+import java.util.function.BooleanSupplier;
 
 import static org.junit.Assert.*;
 
@@ -17,12 +18,14 @@ public class WebsiteTest {
   Website google;
   Website youtube;
   Website doesntExist;
+  Website zovt;
 
   @Before
   public void init() {
-    google = new Website("https://www.google.com");
+    google = new Website("https://google.com");
     youtube = new Website("https://youtube.com");
     doesntExist = new Website("http://www.bobrosswasgoodatpainingtrees.com");
+
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -36,10 +39,33 @@ public class WebsiteTest {
   }
 
   @Test
+  public void badCertReturnsFalseUptime() {
+    Website badCert = new Website("https://zovt.me");
+    badCert.checkUpTime();
+    TreeMap<Date, Boolean> badCertUptimes = badCert.getUpTimes();
+    assertEquals(badCertUptimes.containsValue(true), false);
+    assertEquals(badCertUptimes.containsValue(false), true);
+  }
+
+  @Test
+  public void testGetURL() {
+    assertEquals(google.getUrl(), "https://google.com");
+    assertEquals(youtube.getUrl(), "https://youtube.com");
+  }
+
+  @Test
+  public void testEquals() {
+    Website google2 = new Website("https://google.com");
+    assertTrue(this.google.equals(google2));
+    assertFalse(this.youtube.equals(this.google));
+  }
+
+  @Test
   public void testCheckUpTime() {
     google.checkUpTime();
     youtube.checkUpTime();
     doesntExist.checkUpTime();
+
     //Sleep the thread so that the next check occurs at another date
     try {
       Thread.sleep(2000);
@@ -56,11 +82,11 @@ public class WebsiteTest {
     //Test to see that the real website are full of true values
     //and no false values
     assertEquals(googleMap.containsValue(true), true);
-    assertEquals(googleMap.containsValue(true), true);
+    assertEquals(googleMap.containsValue(false), false);
     assertEquals(youtubeMap.containsValue(true), true);
-    assertEquals(youtubeMap.containsValue(true), true);
+    assertEquals(youtubeMap.containsValue(false), false);
     assertEquals(doesntExistMap.containsValue(false), true);
-    assertEquals(doesntExistMap.containsValue(false), true);
+    assertEquals(doesntExistMap.containsValue(true), false);
     //Ensure that the maps have two entries (one for both times)
     assertEquals(googleMap.size(), 2);
     assertEquals(youtubeMap.size(), 2);

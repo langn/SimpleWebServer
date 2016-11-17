@@ -3,7 +3,9 @@ package sitemonitor.model;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.TreeMap;
 
 /**
@@ -60,6 +62,30 @@ public class Website {
   }
 
   /**
+   * Checks to see if this is equal to the given object (by comparing the URL fields)
+   * @param other the object to be checked for equality
+   * @return true if the other object is a {@code Website} and has the same URL as this
+   */
+  @Override
+  public boolean equals(Object other) {
+    if (other instanceof Website) {
+      return ((Website)other).getUrl().equals(this.getUrl());
+      }
+    //These are not the same type
+    return false;
+  }
+
+  /**
+   * Provides a hash code for this object to be used in the {@code equals} method
+   * @return the hash code
+   */
+  @Override
+  public int hashCode() {
+    return url.hashCode() + upTimes.hashCode();
+  }
+
+
+  /**
    * Checks to see if this website is up and adds the result to the tree-map using the current
    * date
    */
@@ -68,6 +94,7 @@ public class Website {
     //The current system time
     Date date = new Date();
 
+    //Check to see if the site is up (should return status code 200)
     try {
       URL siteURL = new URL(url);
       HttpURLConnection testConnection = (HttpURLConnection) siteURL.openConnection();
@@ -77,13 +104,16 @@ public class Website {
       if (testConnection.getResponseCode() == 200) {
         this.upTimes.put(date, true);
       }
+      //Otherwise something is wrong with this site (code other than 200)
       else {
         this.upTimes.put(date, false);
       }
     }
+    //Something went wrong with the connection, so set its up to false
     catch (Exception e) {
       this.upTimes.put(date, false);
     }
   }
+
 
 }

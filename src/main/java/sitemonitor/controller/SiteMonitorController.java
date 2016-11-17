@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 import sitemonitor.model.SiteModel;
 import sitemonitor.model.Website;
@@ -27,7 +27,8 @@ public class SiteMonitorController {
    * @return the list of {@link Website} for this model in JSON format
    */
   @RequestMapping(value = "/getsites")
-  public @ResponseBody ArrayList<Website> getSitesData() {
+  public @ResponseBody
+  HashSet<Website> getSitesData() {
     return this.model.getSites();
   }
 
