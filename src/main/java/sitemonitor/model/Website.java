@@ -81,7 +81,7 @@ public class Website {
    */
   @Override
   public int hashCode() {
-    return url.hashCode() + upTimes.hashCode();
+    return url.hashCode();
   }
 
 
