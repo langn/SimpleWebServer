@@ -60,7 +60,7 @@ public class SiteMonitorControllerTest {
             .andExpect(view().name("addSite"));
   }
 
-  
+
   @Test
   public void testReturnData() throws Exception {
     MvcResult result = mockMvc.perform(get("/getsites"))

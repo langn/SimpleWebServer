@@ -39,15 +39,6 @@ public class WebsiteTest {
   }
 
   @Test
-  public void badCertReturnsFalseUptime() {
-    Website badCert = new Website("https://zovt.me");
-    badCert.checkUpTime();
-    TreeMap<Date, Boolean> badCertUptimes = badCert.getUpTimes();
-    assertEquals(badCertUptimes.containsValue(true), false);
-    assertEquals(badCertUptimes.containsValue(false), true);
-  }
-
-  @Test
   public void testGetURL() {
     assertEquals(google.getUrl(), "https://google.com");
     assertEquals(youtube.getUrl(), "https://youtube.com");
